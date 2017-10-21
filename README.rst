@@ -204,19 +204,18 @@ Both the worker and beat services need to be running at the same time.
 1. Start a Celery worker service and specify your django project name::
 
 
-    $ celery -A [django-project-name] worker --loglevel=info
+    $ celery -A [project-name] worker --loglevel=info
 
 
 2. As a separate process, start the beat service and specify the dajngo scheduler::
 
 
-    $ celery -A tuid beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler
+    $ celery -A [project-name] beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler
 
 
 *OR* you can use the -S (scheduler flag), for more options see ``celery beat --help ``)::
 
-    $ celery -A tuid beat -l info -S django
-
+    $ celery -A [project-name] beat -l info -S django
 
 As alternative, you can run both the worker and beat services with one command
 (recommended for development environment only)::

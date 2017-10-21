@@ -190,6 +190,45 @@ You can use the ``enabled`` flag to temporarily disable a periodic task::
     >>> periodic_task.enabled = False
     >>> periodic_task.save()
 
+
+Example running periodic tasks
+-----------------------------------
+
+The periodic tasks still need 'workers' to execute them.
+So make sure the default **Celery** package is installed.
+(If not installed, please follow the installation instructions
+here: https://github.com/celery/celery)
+
+Both the worker and beat services need to be running at the same time.
+
+1. Start a Celery worker service and specify your django project name::
+
+
+    $ celery -A [django-project-name] worker --loglevel=info
+
+
+2. As a separate process, start the beat service and specify the dajngo scheduler::
+
+
+    $ celery -A tuid beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler
+
+
+*OR* you can use the -S (scheduler flag), for more options see ``celery beat --help ``)::
+
+    $ celery -A tuid beat -l info -S django
+
+
+As alternative, you can run both the worker and beat services with one command
+(recommended for development environment only)::
+
+
+    $ celery -A prj worker --beat --scheduler django --loglevel=info
+
+
+3. Now you can add and manager your periodic tasks from the Django Admin dashboard.
+
+
+
 Installation
 ============
 
@@ -249,4 +288,3 @@ pip command::
 .. |pyimp| image:: https://img.shields.io/pypi/implementation/django-celery-beat.svg
     :alt: Support Python implementations.
     :target: http://pypi.python.org/pypi/django-celery-beat/
-
